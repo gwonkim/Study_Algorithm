@@ -44,40 +44,65 @@
 
 ---------------------
 -> replace과 정규식 이용
--> 런타임 에러
+-> 런타임 에러 () 주의 
+-> 2글자 이하 시 마지막 글자 추가에서 while문 사용시 일부 실패(제출 시) repeat 이용 
 */
 
 
 function solution(new_id) {
-    var answer = idCheck1(new_id);
-    var answer = idCheck2(new_id);
-    return answer;
+    let answer1 = idCheck1(new_id);
+    let answer2 = idCheck2(new_id);
+    console.log('answer1', answer1);
+    console.log('answer2', answer2);
 }
 
-// 런타임 에러 + (제출시)일부 실패1
+// (제출 시, 예제로는 정상작동)일부 실패
 const idCheck1 = (id) => {
     id = id.toLowerCase()
-        .replace(/[^(a-z0-9-_.)]+/g, '')
-        .replace(/\.{2,}+/g, '.')
-        .replace(/^\.|\.$+/g, '')
-        .replace(/^$/, 'a')
-        .slice(0, 15).replace(/\.$/, '');
-    if (id.length <= 2) {
-        while(id.length <3) {
-            id = id.concat(id[id.length-1]);
-        }
-    }
-    return id;
-}
-
-// (제출시)일부 실패2
-const idCheck2 = (id) => {
-    id = id.toLowerCase()
-        .replace(/[^(a-z0-9-_.)]/g, '')
+        .replace(/[^(a-z0-9-_.)]/g, '') // 일부 실패 이유 : () 때문에 에러 
         .replace(/\.{2,}/g, '.')
         .replace(/^\.|\.$/g, '')
         .replace(/^$/, 'a')
         .slice(0, 15).replace(/\.$/, '');
     return id.length > 2 ? id : id + id.charAt(id.length - 1).repeat(3 - id.length);
 }
+
+// 성공
+const idCheck2 = (id) => {
+    id = id.toLowerCase()
+        .replace(/[^a-z0-9-_.]/g, '') // 같은 코드 .replace(/[^\w-_.]/g, '')   a-z0-9 === \w
+        .replace(/\.{2,}/g, '.')
+        .replace(/^\.|\.$/g, '')
+        .replace(/^$/, 'a')
+        .slice(0, 15).replace(/\.$/, '');
+    return id.length > 2 ? id : id + id.charAt(id.length - 1).repeat(3 - id.length);
+}
+
+let a = "...!@BaT#*..y.abcdefghijklm"; // "abcdefghijklmn.p"
+let b = "z-+.^."; // "z--"
+let c = "=.="; // "aaa"
+let d = "123_.def"; // "123_.def"
+let e = "abcdefghijklmn.p"; // "abcdefghijklmn"
+
+
+console.log('solution a');
+solution(a);
+console.log();
+
+console.log('solution b');
+solution(b);
+console.log();
+
+console.log('solution c');
+solution(c);
+console.log();
+
+console.log('solution d');
+solution(d);
+console.log();
+
+console.log('solution e');
+solution(e);
+console.log();
+
 
