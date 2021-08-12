@@ -52,8 +52,10 @@
 function solution(new_id) {
     let answer1 = idCheck1(new_id);
     let answer2 = idCheck2(new_id);
+    let answer3 = idCheck3(new_id);
     console.log('answer1', answer1);
     console.log('answer2', answer2);
+    console.log('answer3', answer3);
 }
 
 // (제출 시, 예제로는 정상작동)일부 실패
@@ -76,6 +78,16 @@ const idCheck2 = (id) => {
         .replace(/^$/, 'a')
         .slice(0, 15).replace(/\.$/, '');
     return id.length > 2 ? id : id + id.charAt(id.length - 1).repeat(3 - id.length);
+}
+
+const idCheck3 = (id) => {
+    id = id.toLowerCase()
+        .replace(/[^\w-_.]/g, '') // 같은 코드 .replace(/[^\w-_.]/g, '')   a-z0-9 === \w
+        .replace(/\.{2,}/g, '.')
+        .replace(/^\.|\.$/g, '')
+        .replace(/^$/, 'a')
+        .slice(0, 15).replace(/\.$/, '');
+    return id.padEnd(3, id[id.length-1]) // 새로운 방법 padEnd()이용 
 }
 
 let a = "...!@BaT#*..y.abcdefghijklm"; // "abcdefghijklmn.p"
