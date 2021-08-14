@@ -1,4 +1,6 @@
 /* 
+상호평가 
+
 <문제>
 대학 교수인 당신은, 상호평가를 통하여 학생들이 제출한 과제물에 학점을 부여하려고 합니다. 아래는 0번부터 4번까지 번호가 매겨진 5명의 학생들이 자신과 다른 학생의 과제를 평가한 점수표입니다.
 
@@ -39,124 +41,78 @@ No.	0	1	2	3	4
 [[50,90],[50,87]]	"DA"
 [[70,49,90],[68,50,38],[73,31,100]]	"CFD"
 */
-function solution1(scores) {
-    var answer = '';
-    let students = [];
-    for(let i=0; i<scores.length; i++) {
-        students[i] = [];
-        for(let j=0; j<scores.length; j++) {
-            
-            students[i][j] = scores[j][i];
-        }
-        console.log('s', students)
-    }
-    for(let i=0; i<scores.length; i++) {
-        for(let j=0; j<scores.length; j++) {
-            if(Math.max(students[i]) === students[i][i] && students[i][i] === scores[i][j] && !scores[i][i]) {
-                grade1(students[i], answer);
-  
-            } else {
-                grade1(students[i].slice(1, scores[i][i]), answer);
-            }
-        }
-        console.log('s', students)
-    }
 
-    console.log('students', students);
-    console.log('answer', answer);
-    
-    return answer;
-};
-
-let grade1 = (arr, answer) => {
-    let avg = arr.reduce((a, b) => a+b)
-    switch(avg) {
-        case 90 <= avg:
-            answer.push('A');
-            break;
-        case 80 <= avg:
-            answer.push('B');
-            break;
-        case 70 <= avg:
-            answer.push('C');
-            break;
-        case 50 <= avg:
-            answer.push('D');
-            break;
-        case 50 > avg:
-            answer.push('F');
-            break;
-    }
-    console.log('grade', answer);
-};
-
-
+// 내 풀이
 function solution(scores) {
-    var answer = '';
+    let s = scores
+    .map((score,i)=> scores.map(v=>v[i]));
+    console.log('ssssss', s)
+    let answer = [];
     let students = [];
-    for(let i=0; i<scores.length; i++) {
+    scores.map((v, i) => {
         students[i] = [];
-        for(let j=0; j<scores.length; j++) {
-            
+        scores.map((v, j) => {
             students[i][j] = scores[j][i];
-        }
-        console.log('s', students)
-        if(i === scores.length -1) {
-            console.log('test')
-            students.forEach((a, index) => {
-                             a.forEach((b, i) => {
-                console.log('Math.ma',Math.max(...a), a[index], a[i]);
-                console.log('Math.max(a) === b[i1]', Math.max(...a) === a[index])
-                console.log('Math.min(a) === b[i1]', Math.min(...a) === a[index])
-                                if(Math.max(...a) === a[index]) {
-            console.log('test23')
-                    
-                    if(index!== i && a[index] === a[i]) {
-                        grade(a.reduce((a, b) => a+b), answer);
-                    } else {
-                        grade(a.slice(1, index).reduce((a, b) => a+b), answer);
-                    }
-                } else if(Math.min(...a) === a[index]) {
-                    if(index!== i && a[index] === i) {
-                        grade(a.reduce((a, b) => a+b), answer);
-                    } else {
-                        grade(a.slice(1, index).reduce((a, b) => a+b), answer);
-                    }
-                }
+        })
+    });
 
-            })})
+    students.map((v, i) => {
+        let isMax = v[i] === Math.max(...v);
+        let isMin = v[i] === Math.min(...v);
+        let same = v.filter((s, index) => v[i] === s && index !== i);
+        let isSame = same && same !== undefined ? same : null;
+        if ((isMax || isMin) && isSame[0] === undefined) {
+            grade(v.filter((t) => v[i] !== t), answer);
+        } else {
+            grade(v, answer);
         }
-    }
-    console.log('students', students);
-    console.log('answer', answer);
-    
-    return answer;
-}
+    });
+    return answer.join('');
+};
 
-const grade = (avg, answer) => {
-    switch(avg) {
-        case 90 <= avg:
+let grade = (arr, answer) => {
+    let avg = Math.floor((arr.reduce((a, b) => a + b) / arr.length) / 10);
+    switch (avg) {
+        case 9:
             answer.push('A');
             break;
-        case 80 <= avg:
+        case 8:
             answer.push('B');
             break;
-        case 70 <= avg:
+        case 7:
             answer.push('C');
             break;
-        case 50 <= avg:
+        case 5:
+        case 6:
             answer.push('D');
             break;
-        case 50 > avg:
+        default:
             answer.push('F');
             break;
     }
-    console.log('grade', answer);
-}
+    return answer;
+};
 
+// 다른 사용자의 풀이
+let solutions = scores => (
+    scores[0].map((_, c) => scores.map(r => r[c]))
+        .map((s, i) => [...s.splice(i, 1), s])
+        .map(([m, s]) => Math.min(...s) <= m && m <= Math.max(...s) ? [m, ...s] : s)
+        .map(s => "FDDCBAA"[Math.max(parseInt(s.reduce((a, c) => a + c) / s.length / 10) - 4, 0)])
+        .join("")
+);
 
-console.log('solution1 a', solution1(a));
-console.log('solution1 b', solution1(b));
+let a = [
+    [100, 90, 98, 88, 65],
+    [50, 45, 99, 85, 77],
+    [47, 88, 95, 80, 67],
+    [61, 57, 100, 80, 65],
+    [24, 90, 94, 75, 65]
+]; // "FBABD"
+let b = [[50, 90], [50, 87]]; // "DA"
+let c = [[70, 49, 90], [68, 50, 38], [73, 31, 100]]; // "CFD"
 
-console.log('solution2 a', solution2(a));
-console.log('solution2 b', solution2(b));
+console.log('solution a', solution(a));
+console.log('solution b', solution(b));
+console.log('solution c', solution(c));
+console.log('다른 사용자의 풀이', solutions(a));
