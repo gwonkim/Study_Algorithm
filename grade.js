@@ -42,11 +42,8 @@ No.	0	1	2	3	4
 [[70,49,90],[68,50,38],[73,31,100]]	"CFD"
 */
 
-// 내 풀이
-function solution(scores) {
-    let s = scores
-    .map((score,i)=> scores.map(v=>v[i]));
-    console.log('ssssss', s)
+// 제출한 내 풀이
+function solution1(scores) {
     let answer = [];
     let students = [];
     scores.map((v, i) => {
@@ -54,7 +51,7 @@ function solution(scores) {
         scores.map((v, j) => {
             students[i][j] = scores[j][i];
         })
-    });
+    }); // 같은 코드 scores.map((s, i) => scores.map(v => v[i]))
 
     students.map((v, i) => {
         let isMax = v[i] === Math.max(...v);
@@ -67,6 +64,25 @@ function solution(scores) {
             grade(v, answer);
         }
     });
+    return answer.join('');
+};
+
+// 다른 풀이 참고 후 활용 
+const solution2 = (scores) => {
+    let answer = [];
+    scores
+        .map((s, i) => scores.map(v => v[i]))
+        .map((v, i) => {
+            let isMax = v[i] === Math.max(...v);
+            let isMin = v[i] === Math.min(...v);
+            let same = v.filter((s, index) => v[i] === s && index !== i);
+            let isSame = same && same !== undefined ? same : null;
+            if ((isMax || isMin) && isSame[0] === undefined) {
+                grade(v.filter((t) => v[i] !== t), answer);
+            } else {
+                grade(v, answer);
+            }
+        })
     return answer.join('');
 };
 
@@ -112,7 +128,11 @@ let a = [
 let b = [[50, 90], [50, 87]]; // "DA"
 let c = [[70, 49, 90], [68, 50, 38], [73, 31, 100]]; // "CFD"
 
-console.log('solution a', solution(a));
-console.log('solution b', solution(b));
-console.log('solution c', solution(c));
+console.log('solution1 a', solution1(a));
+console.log('solution1 b', solution1(b));
+console.log('solution1 c', solution1(c));
+
+console.log('solution2 a', solution2(a));
+console.log('solution2 b', solution2(b));
+console.log('solution2 c', solution2(c));
 console.log('다른 사용자의 풀이', solutions(a));
