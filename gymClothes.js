@@ -31,4 +31,55 @@ function solution(n, lost, reserve) {
     return n - lost.length;
 }
 
+// 테스트 13 실패 
+const solution = (n, lost, reverse) => {
+    let answer = n - lost.length;
+    lost = lost.filter((l) => {
+        let revIdx = reverse.findIndex(r => r === l);
+        if(revIdx === -1) return l
+        else {
+            reverse.splice(revIdx,1);
+            answer++;
+        }
+    });
+    
+    lost.forEach(l => {
+        let revIdx = reverse.findIndex(r => l-r == 1 || l-r == -1);
+        if(revIdx !== -1) {
+            reverse.splice(revIdx,1);
+            answer++;
+        }
+    });
+    
+    return  answer;
+};
 
+const solution = (n, lost, reverse) => {
+    lost = lost.filter((l) => {
+        let revIdx = reverse.findIndex(r => r === l);
+        revIdx === -1 ? l : reverse.splice(revIdx,1);
+    });
+    
+    lost.forEach(l => {
+        let revIdx = reverse.findIndex(r => l-r == 1 || l-r == -1);
+        revIdx !== -1 ? reverse.splice(revIdx,1) : false;
+    });
+    
+    return  n - lost.length;
+};
+
+function solution(n, lost, reserve) {
+    // 도난 당했지만 여벌이 있는 경우
+    lost.map((a, i) => reserve.filter((b, index) => {
+        if(a===b) {
+            lost.splice(i, 1);
+            reserve.splice(index, 1);
+        }
+    }));
+    
+    // 도난 당했지만 여벌이 없는 경우
+    lost.map((l, i) => {
+        reserve.filter((r) => (l !== 1 && (l-r === -1 || l-r === 1)) ? lost.splice(i, 1) : '');
+    })
+    return n - lost.length;
+}
