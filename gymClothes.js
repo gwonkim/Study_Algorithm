@@ -10,64 +10,14 @@
 여벌의 체육복을 가져온 학생의 수는 1명 이상 n명 이하이고 중복되는 번호는 없습니다.
 여벌 체육복이 있는 학생만 다른 학생에게 체육복을 빌려줄 수 있습니다.
 여벌 체육복을 가져온 학생이 체육복을 도난당했을 수 있습니다. 이때 이 학생은 체육복을 하나만 도난당했다고 가정하며, 남은 체육복이 하나이기에 다른 학생에게는 체육복을 빌려줄 수 없습니다.
-
 */
 
-
-// 실패 
-function solution(n, lost, reserve) {
-    // 도난 당했지만 여벌이 있는 경우
-    lost.forEach((a, i) => reserve.filter((b, i2) => {
-        if(a===b) {
-            lost.splice(i, 1);
-            reserve.splice(i2, 1);
-        }
-    }));
-    
-    // 도난 당했지만 여벌이 없는 경우
-    reserve.map((r) => {
-        lost.filter((l, i) => (l-r === -1 || l-r === 1) ? lost.splice(i, 1) : '')
-    })
-    return n - lost.length;
-}
-
-// 테스트 13 실패 
-const solution = (n, lost, reverse) => {
-    let answer = n - lost.length;
-    lost = lost.filter((l) => {
-        let revIdx = reverse.findIndex(r => r === l);
-        if(revIdx === -1) return l
-        else {
-            reverse.splice(revIdx,1);
-            answer++;
-        }
-    });
-    
-    lost.forEach(l => {
-        let revIdx = reverse.findIndex(r => l-r == 1 || l-r == -1);
-        if(revIdx !== -1) {
-            reverse.splice(revIdx,1);
-            answer++;
-        }
-    });
-    
-    return  answer;
-};
-
-const solution = (n, lost, reverse) => {
-    lost = lost.filter((l) => {
-        let revIdx = reverse.findIndex(r => r === l);
-        revIdx === -1 ? l : reverse.splice(revIdx,1);
-    });
-    
-    lost.forEach(l => {
-        let revIdx = reverse.findIndex(r => l-r == 1 || l-r == -1);
-        revIdx !== -1 ? reverse.splice(revIdx,1) : false;
-    });
-    
-    return  n - lost.length;
-};
-
+/* 
+1번 째 코드 : 실패
+이유 : map을 돌리는 중에 일치하는 값이 있어 삭제할 경우 
+그 뒤의 배열 위치가 바뀌기 때문에 순서가 앞당겨져서 일부 값을
+넘길 가능성이 생김.
+*/
 function solution(n, lost, reserve) {
     // 도난 당했지만 여벌이 있는 경우
     lost.map((a, i) => reserve.filter((b, index) => {
@@ -83,3 +33,32 @@ function solution(n, lost, reserve) {
     })
     return n - lost.length;
 }
+
+// 최종 
+function solution1(n, lost, reserve) {
+    lost.sort(); // 테스트 13 : 정렬 안 된 배열 왔을 때
+    let answer = n - lost.length;
+    lost = lost.filter((l) => {
+        let index = reserve.findIndex(r => r === l);
+        if(index === -1) return l
+        else {
+            reserve.splice(index, 1);
+            answer++;
+        }
+    });
+    lost.map(l => {
+        let index = reserve.findIndex(r => l-r == 1 || l-r == -1);
+        if(index !== -1) {
+            reserve.splice(index,1);
+            answer++;
+        }
+    });
+    
+    return answer;
+};
+
+let n = 5;
+let lost = [2, 4];
+let reserve = [1, 3, 5]; // 5
+
+console.log('solution1', solution1(n, lost, reserve));
