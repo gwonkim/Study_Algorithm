@@ -36,6 +36,42 @@ function solution(id_list, report, k) {
     return reportUserList.map((_, i) => reportUserList[i].length);
 }
 
+// 성공
+/* 
+객체로 리스트 정리
+예시
+    {
+        user : [ n1, n2 ],
+        user2 : [ n2, n4]
+    }
+*/
+function solution2(id_list, report, k) {
+    let reportUserList = new Array(id_list.length).fill(0);
+    let reportList = {}; // 사용자 별 신고 리스트 객체
+
+    // 사용자 별 배열 생성 { user : [] }
+    id_list.map((user)=>{
+        reportList[user] = [];
+    });
+
+    // 신고 당한 사람 별 신고자 정리 배열 생성
+    report.forEach((u, i) => {
+        let [userId, reportedId] = u.split(' '); // 사용자ID, 신고한 사용자ID
+       !reportList[reportedId].includes(userId) ? reportList[reportedId].push(userId) : false;
+    });
+
+    // k회 이상인 인원 찾기, 이용 정지
+    for(const key in reportList){
+        if(reportList[key].length >= k){
+            reportList[key].map((user)=>{
+                reportUserList[id_list.indexOf(user)]++;
+            });
+        };
+    };
+
+    return reportUserList;
+}
+
 let test1_id_list = ["muzi", "frodo", "apeach", "neo"];
 let test1_report = ["muzi frodo", "apeach frodo", "frodo neo", "muzi neo", "apeach muzi"];
 let test1_k = 2;
@@ -47,7 +83,4 @@ let test2_k = 3;
 // [0, 0]
 
 console.log(solution2(test1_id_list, test1_report, test1_k));
-// console.log(solution2(test2_id_list, test2_report, test2_k));
-solution(test1_id_list, test1_report, test1_k);
-solution(test2_id_list, test2_report, test2_k);
-
+console.log(solution2(test2_id_list, test2_report, test2_k));

@@ -11,3 +11,12 @@ function solution(numbers) {
 
     return [...new Set(num)].sort((a, b) => a-b); // num 중복 제거 후 오름차순 정렬
 }
+
+let num1 = [2, 1, 3, 4, 1];
+// return [2, 3, 4, 5, 6, 7]
+
+let num2 = [5, 0, 2, 7];
+// return [2, 5, 7, 9, 12]
+
+solution(num1);
+solution(num2);
