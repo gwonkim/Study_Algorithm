@@ -11,7 +11,7 @@ public class Main {
 		// (2) 예약 번호는 1, 2, 3..., 시작시간, 종료시간은 랜덤 값인 예약 객체를 n개 생성하여 배열에 저장
 		for(int i=0; i<reservation.length; i++) {
 			int startTime = (int) (Math.random()*5+1); // 시작 시간: 1~5
-			int endTime = (int) (Math.random()*(6-(startTime+1)+1) + startTime+1); // 종료 시간: 시작 시간+1~6
+			int endTime = (int) (Math.random()*(6-startTime) + startTime+1); // 종료 시간: 시작 시간+1~6
 			reservation[i] = new Reservation(i+1, startTime, endTime);
 		}
 
