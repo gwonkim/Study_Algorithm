@@ -7,6 +7,10 @@ public class MyHashTable {
 	private class Node {
 		int key;
 		Node link;
+		public Node(int key) {
+			this.key = key;
+			this.link = null;
+		}
 	}
 	
 	private Node[] table;
@@ -27,7 +31,20 @@ public class MyHashTable {
 		return (int) Math.floor(m*(key*A%1));
 	}
 	public void add(int key) {
-		table[hash(key)].key = key; 
+		Node newNode = new Node(key);
+		newNode.link = null; 
+		if(table[hash(key)] == null) {
+			table[hash(key)].key = key; 			
+		} else {
+			Node temp = table[hash(key)];
+			
+			
+			
+			while(temp.link != null) {
+				temp = temp.link;
+			}
+			temp.link = newNode;
+		}
 	}
 	
 	
