@@ -7,62 +7,56 @@ public class MyHashTable {
 	private class Node {
 		int key;
 		Node link;
-		public Node(int key) {
-			this.key = key;
-			this.link = null;
-		}
 	}
-	
+
 	private Node[] table;
 	private int m; // 테이블 크기
 	private int n; // 원소 수
 	private static final double A = 0.6180339887;
-		
-	// table tableSize size 초기화
+
+	// 해시 테이블 초기화
 	public MyHashTable(int m) {
-		table = null;
+		table = new Node[m];
 		this.m = m;
-		this.n = m*2;
+		this.n = 0;
 	}
-	
+
+	// 해시값 구하기
 	private int hash(int key) {
-		// table [hash(x)]
-		// key의 해시값을 구하여 그 위치의 연결 리스트 맨 앞에 key값을 저장한 노드 삽입
 		return (int) Math.floor(m*(key*A%1));
 	}
+
+	// 원소 삽입
 	public void add(int key) {
-		Node newNode = new Node(key);
-		newNode.link = null; 
-		if(table[hash(key)] == null) {
-			table[hash(key)].key = key; 			
-		} else {
-			Node temp = table[hash(key)];
-			
-			
-			
-			while(temp.link != null) {
-				temp = temp.link;
-			}
-			temp.link = newNode;
-		}
+		// (A) 적재율 상관 없이 삽입
+		Node newNode = new Node();
+		newNode.key = key;
+		newNode.link = table[hash(key)];
+		table[hash(key)] = newNode;
+		n++; // 원소 수 1 증가
 	}
-	
-	
+
+	// 적재율
 	public double getLoadFactor() {
-		return n/m;
+		return (double) n/m;
 	}
-	
+
+	// 해당 key 존재 여부
 	public boolean contains(int key) {
-		if (table[hash(key)].key == key) {
-			return true;
-		} else {
-			return false;
+		Node temp = table[hash(key)];
+		while(temp != null) {
+			if (temp.key == key) {
+				return true;
+			}
+			temp = temp.link;
 		}
+		return false;
 	}
-	
+
+	// 테이블 프린팅
 	public void printTable() {
 		for(int i=0; i< table.length; i++) {
-			System.out.print("table[" + i + "] =");
+			System.out.print("table[" + i + "] = ");
 			Node temp = table[i];
 			while(temp != null) {
 				System.out.print(temp.key + " ");
@@ -71,6 +65,4 @@ public class MyHashTable {
 			System.out.println();
 		}
 	}
-	
-	
 }
