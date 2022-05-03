@@ -16,6 +16,8 @@ public class recurrence {
 		System.out.print("\n출력 = ");
 		iterativeArrayPrint(array, lb, ub);
 		System.out.println("\n합 = " + recursiveArraySum(array, lb, ub));
+		
+		s.close();
 	}
 	
 	private static void iterativeArrayPrint(int[] array, int lb, int ub) {

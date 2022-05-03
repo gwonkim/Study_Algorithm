@@ -14,6 +14,7 @@ public class recurrence {
 		
 		System.out.print("\n재귀 출력 = ");
 		recursivePrint(n);
+		scanner.close();
 	}
 	
 	private static void iterativePrint(int n) {
