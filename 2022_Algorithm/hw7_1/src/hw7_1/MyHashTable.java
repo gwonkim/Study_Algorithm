@@ -29,10 +29,11 @@ public class MyHashTable {
 	// 원소 삽입
 	public void add(int key) {
 		// (A) 적재율 상관 없이 삽입
+		int hash = hash(key); // hash 한 번만 호출하도록 수정
 		Node newNode = new Node();
 		newNode.key = key;
-		newNode.link = table[hash(key)];
-		table[hash(key)] = newNode;
+		newNode.link = table[hash];
+		table[hash] = newNode;
 		n++; // 원소 수 1 증가
 	}
 
